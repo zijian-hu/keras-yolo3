@@ -11,7 +11,10 @@ from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.regularizers import l2
 
-from yolo3.utils import compose
+from .utils import compose
+
+# threshold for non-maximum suppression
+IoU_THRESHOLD = 0.5
 
 
 @wraps(Conv2D)
@@ -190,7 +193,7 @@ def yolo_eval(yolo_outputs,
               image_shape,
               max_boxes=20,
               score_threshold=.6,
-              iou_threshold=.5):
+              iou_threshold=IoU_THRESHOLD):
     """Evaluate YOLO model on given input and return filtered boxes."""
     num_layers = len(yolo_outputs)
     anchor_mask = [[6,7,8], [3,4,5], [0,1,2]] if num_layers==3 else [[3,4,5], [1,2,3]] # default setting
